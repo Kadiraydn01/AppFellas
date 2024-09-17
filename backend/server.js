@@ -1,17 +1,23 @@
-const express = require("express");
-const cors = require("cors");
-const https = require("https");
+import express from "express";
+import cors from "cors";
+import https from "https";
+import connectToMongoDB from "./db/connectToMongoDb.js";
+import dotenv from "dotenv";
+dotenv.config();
+
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
 
 app.get("/api/flights", (req, res) => {
+  const flightDirection = req.query.flightDirection || "D";
+
   const options = {
     method: "GET",
     hostname: "api.schiphol.nl",
     port: null,
-    path: "/public-flights/flights",
+    path: `/public-flights/flights?flightDirection=${flightDirection}`,
     headers: {
       ResourceVersion: "v4",
       app_id: "bf4b36d7",
@@ -37,6 +43,7 @@ app.get("/api/flights", (req, res) => {
     .end();
 });
 
-app.listen(port, () => {
+app.listen(PORT, () => {
+  connectToMongoDB();
   console.log(`Server running on http://localhost:${PORT}`);
 });

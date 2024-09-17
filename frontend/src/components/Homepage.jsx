@@ -31,9 +31,11 @@ const Flights = () => {
       <h1>Flights</h1>
       <ul>
         {flights.map((flight, index) => (
-          <li key={index}>
-            {flight.flightName} - {flight.estimatedLandingTime}
-          </li>
+          <div key={index}>
+            {flight.flightName} - {flight.gate}
+            <div>Airport : {flight.route.destinations}</div>
+            <div>Kalkış Saati : {flight.scheduleTime}</div>
+          </div>
         ))}
       </ul>
     </div>
