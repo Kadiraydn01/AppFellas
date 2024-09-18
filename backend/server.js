@@ -3,12 +3,17 @@ import cors from "cors";
 import https from "https";
 import connectToMongoDB from "./db/connectToMongoDb.js";
 import dotenv from "dotenv";
+import authRoutes from "./routes/authRoutes.js";
+import reservationRoutes from "./routes/reservationRoutes.js";
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
+app.use(express.json());
+app.use("/api/auth", authRoutes);
+app.use("/api/reservations", reservationRoutes);
 
 app.get("/api/flights", (req, res) => {
   const flightDirection = req.query.flightDirection || "D";
