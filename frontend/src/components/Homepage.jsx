@@ -13,7 +13,7 @@ const Flights = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const [tripType, setTripType] = useState("oneWay");
+  const [tripType] = useState("oneWay");
 
   const flightPrice = 250;
   const returnFlightPrice = 350;
