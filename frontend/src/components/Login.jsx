@@ -30,7 +30,7 @@ function LoginPage() {
         });
 
         setTimeout(() => {
-          navigate("/home");
+          navigate("/");
         }, 1500);
       } else {
         toast.error("Login failed", {
