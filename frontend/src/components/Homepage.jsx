@@ -1,30 +1,27 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { FaPlaneDeparture } from "react-icons/fa";
-import { FaPlaneArrival } from "react-icons/fa";
-import { FaPlane } from "react-icons/fa";
+import { FaPlaneDeparture, FaPlaneArrival, FaPlane } from "react-icons/fa";
 import foto from "../images/thy1.png";
-import { MdAirplaneTicket } from "react-icons/md";
+
+import Search from "./Search";
+import Header from "./Header";
 
 const Flights = () => {
   const [flights, setFlights] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const navigate = useNavigate();
+
+  const [tripType, setTripType] = useState("oneWay");
+
+  const flightPrice = 250;
+  const returnFlightPrice = 350;
 
   useEffect(() => {
     const fetchFlights = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/flights");
-        console.log(response.data);
-
         setFlights(response.data.flights || []);
       } catch (error) {
         setError(error);
@@ -38,25 +35,6 @@ const Flights = () => {
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
-  //airline için max 18 sayfa var
-  //flight için max 119 sayfa var
-  //destination için max 465 sayfa var
-  const handleLogout = async () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("userId");
-    toast.success("Logout successful 🍀", {
-      position: "top-right",
-      autoClose: 1000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-    });
-    setTimeout(() => {
-      navigate("/login");
-    }, 1500);
-  };
 
   const formatTime = (time) => {
     const [hours, minutes] = time.split(":");
@@ -88,100 +66,61 @@ const Flights = () => {
       hour12: true,
     });
   };
-
-  const randomPrice = () => {
-    return Math.floor(Math.random() * 1000) + 100;
+  const getPriceForFlight = () => {
+    let basePrice = 0;
+    if (tripType === "round-trip") {
+      basePrice = flightPrice + returnFlightPrice;
+    } else {
+      basePrice = flightPrice;
+    }
+    return basePrice;
   };
 
   return (
     <>
-      {/* En üst kısım */}
-      <div className="flex justify-between">
-        <div className="flex">
-          <MdAirplaneTicket className="text-4xl text-purple-500" />
-          <div className="text-2xl font-bold mb-6">Flights</div>
-        </div>
-        <div className="flex  items-center">
-          <button
-            className="text-white bg-purple-700 hover:bg-purple-800 focus:outline-none focus:ring-4 focus:ring-purple-300 font-medium rounded-full text-sm px-5 py-2.5 text-center mb-2 dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-900"
-            onClick={handleLogout}
-          >
-            Logout
-          </button>
-        </div>
-      </div>
-      {/* DatePicker and Ticket Select */}
-      <div>
-        <div>{/* Location eklenecek */}</div>
-
-        <div className="flex justify-center items-center">
-          <div className="flex justify-center items-center">
-            <div className="relative">
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                selectsStart
-                startDate={startDate}
-                endDate={endDate}
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholderText="Gidiş Tarihi"
-                minDate={new Date()}
-              />
-            </div>
-            <span className="mx-4 text-gray-500">to</span>
-            <div className="relative">
-              <DatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                selectsEnd
-                startDate={startDate}
-                endDate={endDate}
-                className="bg-gray-50 border border-gray-300
-             text-gray-900 text-sm rounded-lg focus:ring-blue-500
-              focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700
-               dark:border-gray-600 dark:placeholder-gray-400 dark:text-white
-                dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholderText="Dönüş Tarihi"
-                minDate={startDate}
-              />
-            </div>
+      <div className="bg-purple-300 min-h-screen flex items-center justify-center">
+        <div className="w-10/12 bg-slate-100 border border-gray-300 rounded-lg shadow-lg">
+          {/* En üst kısım */}
+          <Header />
+          <div className="bg-white flex flex-col justify-between px-6 ">
+            {/* Nereden Nereye ve Tarih Seçimi */}
+            <Search />
           </div>
-        </div>
-      </div>
 
-      <div className="flex container border p-20 bg-purple-200">
-        <div className="mt-10 p-8">
-          <div className="space-y-4 ">
+          {/* Uçuşlar listesi */}
+          <div className="space-y-4 overflow-auto max-h-96">
             {flights.map((flight, index) => (
               <div
                 key={index}
-                className="bg-white justify-between border  mx-4 border-gray-300 rounded-lg shadow-lg p-6 flex items-start space-x-4 hover:shadow-xl hover:bg-slate-100 transition-shadow duration-300"
+                className="bg-white border border-gray-300 rounded-lg shadow-lg p-6 flex items-start space-x-4 hover:shadow-xl hover:bg-slate-100 transition-shadow duration-300"
               >
-                {/* Uçuşun kalkış bilgileri */}
+                {/* Kalkış bilgileri */}
                 <div>
                   <div className="flex gap-2 items-center">
                     <FaPlaneDeparture className="text-blue-500 w-4 h-4" />
                     Departure
                   </div>
-                  <div className="flex-1">
-                    <div className="text-lg font-semibold">
-                      {flight.flightName}
-                    </div>
-                    <div className="text-sm text-gray-600">{flight.gate}</div>
-
-                    <div className="flex items-center text-sm text-gray-500 mt-1">
-                      {formatTime(flight.scheduleTime)}
-                    </div>
+                  <div className="text-lg font-semibold">
+                    {flight.flightName}
                   </div>
-                  <div className="flex gap-2 text-purple-600 font-bold">
+                  <div className="text-sm text-gray-600">{flight.gate}</div>
+                  <div className="flex items-center text-sm text-gray-500 mt-1">
+                    {formatTime(flight.scheduleTime)}
+                  </div>
+
+                  <div
+                    key={flight.flightName}
+                    className="flex gap-2 text-purple-600 font-bold mt-2"
+                  >
                     <h2>Price:</h2>
-                    <p>{randomPrice()}$</p>
+                    <p>{getPriceForFlight()}$</p>
                   </div>
                 </div>
-                {/* Orta Alan */}
-                <div className="flex mt-3 w-full justify-between items-center ">
+
+                {/* Uçuş orta alan */}
+                <div className="flex mt-3 w-1/2 justify-between items-center ">
                   {/* Sol çizgi */}
-                  <div className="border-t-4 border-gray-300 flex-grow mx-12"></div>
+                  <div className="border-t-4 border-gray-300 w-32"></div>
 
                   {/* Uçuş saati ve uçak */}
                   <div className="flex flex-col justify-center items-center space-x-1 gap-4">
@@ -195,19 +134,19 @@ const Flights = () => {
                   </div>
 
                   {/* Sağ çizgi */}
-                  <div className="border-t-4 border-gray-300 flex-grow mx-12"></div>
+                  <div className="border-t-4 border-gray-300  w-32"></div>
                 </div>
 
-                {/* Uçuşun varış bilgileri */}
-                <div className="flex flex-col justify-center items-center">
+                {/* Varış bilgileri */}
+                <div className="flex flex-col items-end">
                   <div className="flex gap-2 items-center">
                     <FaPlaneArrival className="text-green-500 w-4 h-4" />
-                    <p>Arrival</p>
+                    Arrival
                   </div>
-                  <div className="flex items-center text-md font-bold text-black">
+                  <div className="text-md font-bold text-black">
                     {formatLandingTime(flight.scheduleTime)}
                   </div>
-                  <div className="flex items-center text-sm text-gray-500 mt-2">
+                  <div className="text-sm text-gray-500 mt-2">
                     Airport: {flight.route.destinations}
                   </div>
                   <button className="mt-4 bg-purple-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
@@ -218,7 +157,6 @@ const Flights = () => {
             ))}
           </div>
         </div>
-        <ToastContainer />
       </div>
     </>
   );
