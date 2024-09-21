@@ -88,7 +88,7 @@ const Search = () => {
 
   return (
     <div className="bg-white flex flex-col w-2/3 mx-8 rounded-3xl justify-between px-6 ">
-      <div className="flex justify-between my-8 items-center">
+      <div className="flex justify-between  my-8 items-center">
         <div className="flex gap-4 items-center">
           <IoAirplaneSharp className="text-4xl text-purple-600" />
           <h1 className="font-semibold text-xl">BOOK YOUR FLIGHT</h1>
