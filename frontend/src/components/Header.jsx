@@ -46,16 +46,16 @@ const Header = () => {
     <div>
       <div className="flex justify-between mb-8 p-6">
         <div className="flex justify-center items-center gap-2 text-center">
-          <MdAirplaneTicket className="text-4xl text-purple-500" />
+          <MdAirplaneTicket className="text-4xl text-purple-900" />
           <div className="text-xl font-semibold">PLANE SCAPE</div>
         </div>
         <div className="flex items-center text-center gap-4">
           <div className="flex items-center font-bold gap-2">
-            <FaTags className="text-xl text-purple-500" />
+            <FaTags className="text-xl text-purple-950" />
             Deals
           </div>
           <div className="flex items-center font-bold gap-2 ml-4">
-            <TbWorld className="text-xl text-purple-500" />
+            <TbWorld className="text-xl text-purple-950" />
             Discover
           </div>
 

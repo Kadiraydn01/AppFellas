@@ -25,7 +25,7 @@ const Search = () => {
   const [tripType, setTripType] = useState("one-way");
   const [airports, setAirports] = useState([]);
   const [filteredAirports, setFilteredAirports] = useState([]);
-  const dropdownRef = useRef(null); // Ref for dropdown
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     const loadAirports = async () => {
@@ -36,8 +36,17 @@ const Search = () => {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("toCity", toCity);
+    if (toCity) {
+      const iataCode = toCity.split("-").pop();
+      localStorage.setItem("toCity", iataCode);
+    }
   }, [toCity]);
+
+  useEffect(() => {
+    if (startDate) {
+      localStorage.setItem("startDate", startDate.toISOString());
+    }
+  }, [startDate]);
 
   useEffect(() => {
     const filtered = airports.filter((airport) =>
@@ -49,10 +58,9 @@ const Search = () => {
   }, [toCity, airports]);
 
   useEffect(() => {
-    // Handle clicks outside of the dropdown
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setFilteredAirports([]); // Close dropdown
+        setFilteredAirports([]);
       }
     };
 
@@ -64,25 +72,23 @@ const Search = () => {
 
   const handleCitySelect = (airport) => {
     setToCity(`${airport.city}-${airport.iata_code}`);
-    setFilteredAirports([]); // Clear suggestions
+    setFilteredAirports([]);
     document.getElementById("toCity").blur();
   };
 
-  const clearFields = () => {
-    setFromCity("");
-    setToCity("");
-    setStartDate(null);
-    setEndDate(null);
-  };
-
   const searchFlights = () => {
-    console.log("Searching for flights...");
-    clearFields();
+    const iataCode = toCity.split("-").pop();
+    localStorage.setItem("toCity", iataCode);
+    if (startDate) {
+      localStorage.setItem("startDate", startDate.toISOString());
+    }
+
+    window.dispatchEvent(new Event("flightSearch"));
   };
 
   return (
-    <div>
-      <div className="flex justify-between w-full my-8 items-center">
+    <div className="bg-white flex flex-col w-2/3 mx-8 rounded-3xl justify-between px-6 ">
+      <div className="flex justify-between my-8 items-center">
         <div className="flex gap-4 items-center">
           <IoAirplaneSharp className="text-4xl text-purple-600" />
           <h1 className="font-semibold text-xl">BOOK YOUR FLIGHT</h1>
@@ -121,7 +127,7 @@ const Search = () => {
               onChange={(e) => setFromCity(e.target.value)}
               placeholder="Amsterdam-AMS"
               disabled={true}
-              className="bg-white border px-8 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 pl-10"
+              className="bg-white border px-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-48 pl-10"
             />
           </div>
 
@@ -133,7 +139,7 @@ const Search = () => {
               value={toCity}
               onChange={(e) => setToCity(e.target.value)}
               placeholder="To City"
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 pl-10"
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg w-48 focus:ring-blue-500 focus:border-blue-500 p-2.5 pl-8"
               onFocus={() => {
                 if (toCity) {
                   setFilteredAirports(
@@ -172,7 +178,7 @@ const Search = () => {
               selectsStart
               startDate={startDate}
               endDate={endDate}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-8 focus:ring-blue-500 focus:border-blue-500 p-2.5"
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-8 focus:ring-blue-500 focus:border-blue-500 w-40 p-2.5"
               minDate={new Date()}
               dateFormat={"dd/MM/yyyy"}
             />
@@ -185,7 +191,7 @@ const Search = () => {
               selectsEnd
               startDate={startDate}
               endDate={endDate}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-8 focus:ring-blue-500 focus:border-blue-500 p-2.5"
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-8 focus:ring-blue-500 focus:border-blue-500 w-40 p-2.5"
               minDate={startDate}
               dateFormat={"dd/MM/yyyy"}
               disabled={tripType === "one-way"}
