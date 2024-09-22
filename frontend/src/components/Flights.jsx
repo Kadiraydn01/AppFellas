@@ -8,6 +8,8 @@ import foto3 from "../images/2.jpg";
 import foto4 from "../images/3.jpg";
 import foto5 from "../images/4.jpg";
 import Carousel from "./Carousel";
+import ReservationModal from "./ReservationModal";
+//düzenleme
 
 const Flights = ({ showFlights }) => {
   const [flights, setFlights] = useState([]);
@@ -22,12 +24,27 @@ const Flights = ({ showFlights }) => {
   const [flightsToShow, setFlightsToShow] = useState(10);
   const [selectedFlight, setSelectedFlight] = useState(null);
   const carouselImages = [foto2, foto3, foto4, foto5];
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isDetailsModalOpen, setIsDetailsModalOpen] = useState(false);
 
-  const assignRandomPrices = (flights) => {
-    return flights.map((flight) => ({
+  const priceList = [
+    200, 202, 208, 210, 213, 217, 221, 226, 232, 233, 235, 237, 239, 240, 242,
+    244, 250, 251, 258, 260, 265, 267, 268, 245, 220, 230, 204, 216, 231, 241,
+  ];
+
+  const openDetailsModal = (flight) => {
+    setSelectedFlight(flight);
+    setIsDetailsModalOpen(true);
+  };
+  const assignFixedPrices = (flights) => {
+    return flights.map((flight, index) => ({
       ...flight,
-      price: Math.floor(Math.random() * 400) + 100,
+      price: priceList[index % priceList.length],
     }));
+  };
+  const openReservationModal = (flight) => {
+    setSelectedFlight(flight);
+    setIsModalOpen(true);
   };
 
   const handleSortAndFilter = (flightsToFilter) => {
@@ -89,7 +106,8 @@ const Flights = ({ showFlights }) => {
           `http://localhost:5000/api/flights?scheduleDate=${formattedDate}`
         );
 
-        const flightsWithPrices = assignRandomPrices(response.data || []);
+        const flightsWithPrices = assignFixedPrices(response.data || []);
+
         setFlights(flightsWithPrices);
         setFilteredFlights(flightsWithPrices);
         setDisplayedFlights(flightsWithPrices.slice(0, flightsToShow));
@@ -101,6 +119,7 @@ const Flights = ({ showFlights }) => {
     };
 
     fetchFlights();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -112,6 +131,7 @@ const Flights = ({ showFlights }) => {
       setFilteredFlights(filtered);
       setDisplayedFlights(filtered.slice(0, flightsToShow));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showFlights, flights]);
 
   useEffect(() => {
@@ -139,17 +159,15 @@ const Flights = ({ showFlights }) => {
     };
   }, [flights, flightsToShow]);
 
-  useEffect(() => {
-    const sortedAndFilteredFlights = handleSortAndFilter(filteredFlights);
-    setDisplayedFlights(sortedAndFilteredFlights.slice(0, flightsToShow));
-  }, [
-    arrivalTime,
-    stops,
-    airlines,
-    sortOption,
-    flightsToShow,
-    filteredFlights,
-  ]);
+  useEffect(
+    () => {
+      const sortedAndFilteredFlights = handleSortAndFilter(filteredFlights);
+      setDisplayedFlights(sortedAndFilteredFlights.slice(0, flightsToShow));
+    },
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [arrivalTime, stops, airlines, sortOption, flightsToShow, filteredFlights]
+  );
 
   const loadMoreFlights = () => {
     setFlightsToShow((prev) => prev + 10);
@@ -223,7 +241,7 @@ const Flights = ({ showFlights }) => {
                             $
                             {localStorage.getItem("tripType") === "one-way"
                               ? flight.price
-                              : flight.price + 300}
+                              : flight.price * 2}
                           </p>
                         </div>
 
@@ -269,7 +287,10 @@ const Flights = ({ showFlights }) => {
                           Airport: {flight.route.destinations.join(", ")}
                         </div>
                       </div>
-                      <button className="mt-4 bg-purple-800 hover:bg-blue-700 w-full h-20 text-white font-bold py-2 px-4 rounded">
+                      <button
+                        className="mt-4 bg-purple-800 hover:bg-blue-700 w-full h-20 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => openReservationModal(flight)}
+                      >
                         Book Flight
                       </button>
                     </div>
@@ -278,7 +299,7 @@ const Flights = ({ showFlights }) => {
                   <div>
                     <button
                       className="bg-slate-200 hover:bg-slate-300 text-purple-800 font-semibold underline py-4 px-4 rounded"
-                      onClick={() => setSelectedFlight(flight)}
+                      onClick={() => openDetailsModal(flight)}
                     >
                       Check the details
                     </button>
@@ -310,10 +331,21 @@ const Flights = ({ showFlights }) => {
               )}
           </div>
 
-          {selectedFlight && (
+          {isModalOpen && selectedFlight && (
+            <ReservationModal
+              flight={selectedFlight}
+              onClose={() => setIsModalOpen(false)}
+              price={
+                tripType === "round-trip"
+                  ? selectedFlight.price * 2
+                  : selectedFlight.price
+              }
+            />
+          )}
+          {isDetailsModalOpen && selectedFlight && (
             <FlightDetailsModal
               flight={selectedFlight}
-              onClose={() => setSelectedFlight(null)}
+              onClose={() => setIsDetailsModalOpen(false)}
             />
           )}
 

@@ -17,8 +17,8 @@ const redisClient = createClient({
   url: "redis://localhost:6379",
 });
 
-/*redisClient.on("error", (err) => console.log("Redis Client Error", err));
-await redisClient.connect();*/
+redisClient.on("error", (err) => console.log("Redis Client Error", err));
+await redisClient.connect();
 
 app.use(cors());
 app.use(cookieParser());

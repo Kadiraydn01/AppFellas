@@ -5,13 +5,12 @@ import { FaTags } from "react-icons/fa";
 import { TbWorld } from "react-icons/tb";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Gravatar from "react-gravatar"; // If you're using a Gravatar library
+import Gravatar from "react-gravatar";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Close the dropdown if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (isDropdownOpen && !event.target.closest("#user-menu")) {
@@ -70,7 +69,7 @@ const Header = () => {
               />
               <span className="ml-2">John Doe</span>
             </div>
-            {/* Dropdown menu */}
+
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
                 <button

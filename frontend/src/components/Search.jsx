@@ -42,11 +42,15 @@ const Search = ({ onSearch }) => {
     }
   }, [toCity]);
 
-  useEffect(() => {
-    if (startDate) {
-      localStorage.setItem("startDate", startDate.toISOString());
-    }
-  }, [startDate]);
+  if (startDate) {
+    const localDateString = startDate.toLocaleDateString("tr-TR");
+    localStorage.setItem("startDate", localDateString);
+  }
+
+  if (endDate) {
+    const localEndDateString = endDate.toLocaleDateString("tr-TR");
+    localStorage.setItem("endDate", localEndDateString);
+  }
 
   useEffect(() => {
     const filtered = airports.filter((airport) =>
@@ -83,8 +87,10 @@ const Search = ({ onSearch }) => {
     localStorage.setItem("toCity", iataCode);
     localStorage.setItem("toCityName", city);
     localStorage.setItem("tripType", tripType);
+
     if (startDate) {
-      localStorage.setItem("startDate", startDate.toISOString());
+      const localDateString = startDate.toLocaleDateString("tr-TR");
+      localStorage.setItem("startDate", localDateString);
     }
 
     window.dispatchEvent(new Event("flightSearch"));
@@ -99,7 +105,10 @@ const Search = ({ onSearch }) => {
         </div>
         <div className="flex">
           <div
-            onClick={() => setTripType("round-trip")}
+            onClick={() => {
+              setTripType("round-trip");
+              localStorage.setItem("tripType", "round-trip");
+            }}
             className={`cursor-pointer w-28 border text-center text-md font-medium px-3 py-2 ${
               tripType === "round-trip"
                 ? "bg-purple-900 text-white"
@@ -109,7 +118,12 @@ const Search = ({ onSearch }) => {
             Round Trip
           </div>
           <div
-            onClick={() => setTripType("one-way")}
+            onClick={() => {
+              setTripType("one-way");
+              localStorage.setItem("tripType", "one-way");
+              localStorage.setItem("endDate", "");
+              if (endDate) setEndDate(null);
+            }}
             className={`cursor-pointer border w-28 text-center text-md font-medium px-3 py-2 ${
               tripType === "one-way"
                 ? "bg-purple-900 text-white"
@@ -195,7 +209,9 @@ const Search = ({ onSearch }) => {
               selectsEnd
               startDate={startDate}
               endDate={endDate}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-8 focus:ring-blue-500 focus:border-blue-500 w-40 p-2.5"
+              className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-8 focus:ring-blue-500 focus:border-blue-500 w-40 p-2.5 ${
+                tripType === "one-way" ? "bg-slate-300" : ""
+              }`}
               minDate={startDate}
               dateFormat={"dd/MM/yyyy"}
               disabled={tripType === "one-way"}

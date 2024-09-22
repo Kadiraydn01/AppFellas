@@ -8,6 +8,7 @@ const reservationSchema = new mongoose.Schema({
   reservationDate: { type: Date, default: Date.now },
   flightNumber: { type: String, required: true },
   departureDate: { type: Date, required: true },
+  returnDate: { type: Date },
   fromCity: { type: String, required: true },
   toCity: { type: String, required: true },
   price: { type: Number, required: true },
