@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import https from "https";
+import cookieParser from "cookie-parser";
 import connectToMongoDB from "./db/connectToMongoDb.js";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
@@ -16,10 +17,11 @@ const redisClient = createClient({
   url: "redis://localhost:6379",
 });
 
-redisClient.on("error", (err) => console.log("Redis Client Error", err));
-await redisClient.connect();
+/*redisClient.on("error", (err) => console.log("Redis Client Error", err));
+await redisClient.connect();*/
 
 app.use(cors());
+app.use(cookieParser());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/reservations", reservationRoutes);
