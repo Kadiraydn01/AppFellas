@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const Carousel = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -13,13 +13,18 @@ const Carousel = ({ images }) => {
     );
   };
 
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="relative">
+    <div className="relative w-[90%] mx-auto ">
       <div className="overflow-hidden">
         <img
           src={images[currentIndex]}
           alt={`Slide ${currentIndex}`}
-          className="w-full h-[300px] object-cover"
+          className="w-full h-[500px] mt-10 object-cover rounded-2xl"
         />
       </div>
       <button

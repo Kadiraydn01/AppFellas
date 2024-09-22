@@ -219,8 +219,14 @@ const Flights = ({ showFlights }) => {
                       <div>
                         <div className="flex text-lg gap-2 text-purple-700 font-bold mt-2">
                           <h2>Price:</h2>
-                          <p>${flight.price}</p>
+                          <p>
+                            $
+                            {localStorage.getItem("tripType") === "one-way"
+                              ? flight.price
+                              : flight.price + 300}
+                          </p>
                         </div>
+
                         <div>
                           <p className="font-medium text-slate-600">
                             {tripType === "round-trip"
@@ -280,17 +286,28 @@ const Flights = ({ showFlights }) => {
                 </div>
               ))
             ) : (
-              <p>No flights available for the selected filters.</p>
+              <div className="flex justify-center items-center my-8">
+                <div
+                  className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                  role="alert"
+                >
+                  <strong className="font-bold">Oops!</strong>
+                  <span className="block sm:inline">
+                    No flights available for the selected filters.
+                  </span>
+                </div>
+              </div>
             )}
 
-            {displayedFlights.length < filteredFlights.length && (
-              <button
-                className="mt-4 bg-purple-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                onClick={loadMoreFlights}
-              >
-                Load More Flights
-              </button>
-            )}
+            {displayedFlights.length < filteredFlights.length &&
+              displayedFlights.length > 0 && (
+                <button
+                  className="mt-4 bg-purple-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                  onClick={loadMoreFlights}
+                >
+                  Load More Flights
+                </button>
+              )}
           </div>
 
           {selectedFlight && (
