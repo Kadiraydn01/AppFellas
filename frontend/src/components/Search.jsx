@@ -17,7 +17,7 @@ const fetchAirports = async () => {
   }
 };
 
-const Search = () => {
+const Search = ({ onSearch }) => {
   const [fromCity, setFromCity] = useState("");
   const [toCity, setToCity] = useState("");
   const [startDate, setStartDate] = useState(null);
@@ -77,8 +77,12 @@ const Search = () => {
   };
 
   const searchFlights = () => {
+    onSearch();
     const iataCode = toCity.split("-").pop();
+    const city = toCity.split("-")[0];
     localStorage.setItem("toCity", iataCode);
+    localStorage.setItem("toCityName", city);
+    localStorage.setItem("tripType", tripType);
     if (startDate) {
       localStorage.setItem("startDate", startDate.toISOString());
     }
@@ -87,7 +91,7 @@ const Search = () => {
   };
 
   return (
-    <div className="bg-white flex flex-col w-2/3 mx-8 rounded-3xl justify-between px-6 ">
+    <div className="bg-white flex flex-col mx-8 rounded-3xl justify-between px-6 ">
       <div className="flex justify-between  my-8 items-center">
         <div className="flex gap-4 items-center">
           <IoAirplaneSharp className="text-4xl text-purple-600" />
@@ -96,7 +100,7 @@ const Search = () => {
         <div className="flex">
           <div
             onClick={() => setTripType("round-trip")}
-            className={`cursor-pointer border font-medium p-3 ${
+            className={`cursor-pointer w-28 border text-center text-md font-medium px-3 py-2 ${
               tripType === "round-trip"
                 ? "bg-purple-900 text-white"
                 : "bg-slate-200 text-purple-800"
@@ -106,7 +110,7 @@ const Search = () => {
           </div>
           <div
             onClick={() => setTripType("one-way")}
-            className={`cursor-pointer border font-medium p-3 ${
+            className={`cursor-pointer border w-28 text-center text-md font-medium px-3 py-2 ${
               tripType === "one-way"
                 ? "bg-purple-900 text-white"
                 : "bg-slate-200 text-purple-800"
@@ -182,7 +186,7 @@ const Search = () => {
               minDate={new Date()}
               dateFormat={"dd/MM/yyyy"}
             />
-            <MdDateRange className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-600 w-4 h-4" />
+            <MdDateRange className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-600 w-5 h-5" />
           </div>
           <div className="flex relative">
             <DatePicker
@@ -196,16 +200,16 @@ const Search = () => {
               dateFormat={"dd/MM/yyyy"}
               disabled={tripType === "one-way"}
             />
-            <MdDateRange className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-600 w-4 h-4" />
+            <MdDateRange className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-600 w-5 h-5" />
           </div>
         </div>
       </div>
       <div className="flex justify-start py-6 w-40">
         <button
-          className="bg-purple-600 hover:bg-purple-800 text-white font-bold py-3 px-4 rounded-xl"
+          className="bg-purple-800  text-white font-semibold  py-3 px-4 rounded-xl"
           onClick={searchFlights}
         >
-          Uçuşları Göster
+          Show Flights
         </button>
       </div>
     </div>
