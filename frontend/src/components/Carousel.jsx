@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 
+//we dont want to show all flights before the user clicks on the search button
+//This component will show the images of the cities
 const Carousel = ({ images }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -16,6 +18,7 @@ const Carousel = ({ images }) => {
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

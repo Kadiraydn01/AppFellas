@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// This is the base URL for the backend API
+// With this base URL, we can make requests to the backend
 const api = axios.create({
   baseURL: "http://localhost:5000/api",
   headers: {

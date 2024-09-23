@@ -10,6 +10,7 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // This function will be called when the user clicks on the login button
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);

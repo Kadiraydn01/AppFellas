@@ -3,6 +3,7 @@ import Box from "@mui/material/Box";
 import Rating from "@mui/material/Rating";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
+// This component will be used to display the header of the reservation page
 const ReservationHeader = () => {
   return (
     <>

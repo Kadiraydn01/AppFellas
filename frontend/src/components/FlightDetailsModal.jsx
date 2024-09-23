@@ -1,11 +1,14 @@
 import React from "react";
 
+// This component will show the flight details
 const FlightDetailsModal = ({ flight, onClose }) => {
   const city = localStorage.getItem("toCityName");
   const flightDate = localStorage.getItem("startDate");
   const formattedDate = flightDate.split("T")[0];
   if (!flight) return null;
 
+  // This function will handle the click event outside the modal
+  // and close the modal
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
       onClose();

@@ -7,6 +7,7 @@ import { useState } from "react";
 const Flights = () => {
   const [showFlights, setShowFlights] = useState(false);
 
+  //This function will be called when the user clicks on the search button
   const handleSearch = () => {
     setShowFlights(true);
   };

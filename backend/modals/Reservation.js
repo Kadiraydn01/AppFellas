@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import moment from "moment-timezone";
 
+// This is a schema for the reservation
+
 const reservationSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   fullName: { type: String, required: true },

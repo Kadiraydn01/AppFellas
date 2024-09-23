@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlaneDeparture, FaPlaneArrival, FaPlane } from "react-icons/fa";
+
 import thy from "../images/thy1.png";
 import alitalia from "../images/alitalia.png";
 import lufthansa from "../images/Lufthansa1.png";
@@ -8,18 +9,20 @@ import airFrance from "../images/Air-France.jpg";
 import Brussels from "../images/Brussels.png";
 import AirItaly from "../images/Air-Italy.png";
 import Siberia from "../images/Siberia.png";
-
 import Pegasus from "../images/Pegasus.jpg";
 import British from "../images/British.png";
 import FlyEmirates from "../images/Fly_Emirates.png";
-import FlightDetailsModal from "./FlightDetailsModal";
+
 import foto2 from "../images/1.jpg";
 import foto3 from "../images/2.jpg";
 import foto4 from "../images/3.jpg";
 import foto5 from "../images/4.jpg";
+
 import Carousel from "./Carousel";
+import FlightDetailsModal from "./FlightDetailsModal";
 import ReservationModal from "./ReservationModal";
 
+// This component will show the flights
 const Flights = ({ showFlights }) => {
   const [flights, setFlights] = useState([]);
   const [filteredFlights, setFilteredFlights] = useState([]);
@@ -65,6 +68,8 @@ const Flights = ({ showFlights }) => {
     "British Airways": "BA",
     "Fly Emirates": "EK",
   };
+
+  // This function will assign airlines to the flights
   const assignAirlines = (flights) => {
     const airlines = Object.keys(airlineLogos);
     return flights.map((flight, index) => ({
@@ -73,10 +78,13 @@ const Flights = ({ showFlights }) => {
     }));
   };
 
+  // This function will open the details modal
   const openDetailsModal = (flight) => {
     setSelectedFlight(flight);
     setIsDetailsModalOpen(true);
   };
+
+  // This function will assign fixed prices to the flights
   const assignFixedPrices = (flights) => {
     return flights.map((flight, index) => ({
       ...flight,
@@ -84,14 +92,20 @@ const Flights = ({ showFlights }) => {
       logo: airlineLogos[flight.airline] || thy,
     }));
   };
+
+  // This function will open the reservation modal
   const openReservationModal = (flight) => {
     setSelectedFlight(flight);
     setIsModalOpen(true);
   };
+
+  // This function will handle the stops change
   const handleStopsChange = (e) => {
     const stopValue = parseInt(e.target.value);
     setStops([stopValue]); // Sadece seçilen değeri dizide tutar
   };
+
+  // This function will handle the sort and filter
   const handleSortAndFilter = (flightsToFilter) => {
     let filteredFlights = [...flightsToFilter];
 
@@ -146,16 +160,19 @@ const Flights = ({ showFlights }) => {
     return filteredFlights;
   };
 
+  //Take some information from the local storage
   const storedDate = localStorage.getItem("startDate");
   const formattedDate = storedDate.split("T")[0];
   const tripType = localStorage.getItem("tripType");
   const city = localStorage.getItem("toCityName");
 
+  // This function will handle the arrival time change
   const handleArrivalTimeChange = (e) => {
     setArrivalTime(e.target.value);
   };
 
   useEffect(() => {
+    // This function will fetch the flights from the API
     const fetchFlights = async () => {
       try {
         const response = await axios.get(
@@ -181,6 +198,7 @@ const Flights = ({ showFlights }) => {
   }, []);
 
   useEffect(() => {
+    // This function will filter the flights by destination city
     if (showFlights) {
       const toCity = localStorage.getItem("toCity");
       const filtered = flights.filter((flight) =>
@@ -227,6 +245,7 @@ const Flights = ({ showFlights }) => {
     [arrivalTime, stops, airlines, sortOption, flightsToShow, filteredFlights]
   );
 
+  // This function will handle the load more flights
   const loadMoreFlights = () => {
     setFlightsToShow((prev) => prev + 10);
   };
@@ -234,6 +253,7 @@ const Flights = ({ showFlights }) => {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
+  // This function will format the time
   const formatTime = (time) => {
     const [hours, minutes] = time.split(":");
     const date = new Date();
@@ -246,6 +266,7 @@ const Flights = ({ showFlights }) => {
     });
   };
 
+  // This function will format the landing time
   const formatLandingTime = (departureTime) => {
     if (!departureTime) return "N/A";
     const [hours, minutes] = departureTime.split(":");
@@ -260,6 +281,7 @@ const Flights = ({ showFlights }) => {
       hour12: true,
     });
   };
+
   const price = 230;
   return (
     <>

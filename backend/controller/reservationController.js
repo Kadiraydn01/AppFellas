@@ -1,6 +1,7 @@
 import Reservation from "../modals/Reservation.js";
 import moment from "moment-timezone";
 
+// Create a reservation
 export const createReservation = async (req, res) => {
   const {
     fullName,
@@ -71,6 +72,7 @@ export const createReservation = async (req, res) => {
   }
 };
 
+// Get all reservations for a user
 export const getReservations = async (req, res) => {
   try {
     const reservations = await Reservation.find({ user: req.user.userId });

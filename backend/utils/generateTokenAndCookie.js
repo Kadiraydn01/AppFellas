@@ -1,5 +1,8 @@
 import jwt from "jsonwebtoken";
 
+//Generate token with JWT_SECRET and set it in the cookie
+//Token will expire in 7 days
+//Token will be used to authenticate the user
 const generateTokenAndCookie = (userId, res) => {
   const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
     expiresIn: "7d",

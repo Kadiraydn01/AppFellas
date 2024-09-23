@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import generateTokenAndCookie from "../utils/generateTokenAndCookie.js";
 import jwt from "jsonwebtoken";
 
+// Register function for user
 export const register = async (req, res) => {
   const { username, password } = req.body;
   try {
@@ -19,6 +20,7 @@ export const register = async (req, res) => {
   }
 };
 
+// Login function for user
 export const login = async (req, res) => {
   const { username, password } = req.body;
   try {

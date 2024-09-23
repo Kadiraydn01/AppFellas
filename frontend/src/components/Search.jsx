@@ -5,6 +5,7 @@ import { FaPlaneDeparture, FaPlaneArrival } from "react-icons/fa";
 import { IoAirplaneSharp } from "react-icons/io5";
 import { MdDateRange } from "react-icons/md";
 
+//This function will search for airports
 const fetchAirports = async () => {
   try {
     const response = await fetch("/airports.json");
@@ -52,6 +53,7 @@ const Search = ({ onSearch }) => {
     localStorage.setItem("endDate", localEndDateString);
   }
 
+  //This function will handle the selection of a city
   useEffect(() => {
     const filtered = airports.filter((airport) =>
       `${airport.city}-${airport.iata_code}`
@@ -80,6 +82,7 @@ const Search = ({ onSearch }) => {
     document.getElementById("toCity").blur();
   };
 
+  //This function will search for flights
   const searchFlights = () => {
     onSearch();
     const iataCode = toCity.split("-").pop();

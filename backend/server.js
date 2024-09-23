@@ -69,6 +69,7 @@ const fetchFlightData = async (flightDirection, page = 1, allFlights = []) => {
   });
 };
 
+// This endpoint fetches flight data from the Schiphol API
 app.get("/api/flights", async (req, res) => {
   const flightDirection = req.query.flightDirection || "D";
   const redisKey = `flights_${flightDirection}`;

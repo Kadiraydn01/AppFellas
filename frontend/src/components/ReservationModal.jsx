@@ -14,6 +14,7 @@ const ReservationModal = ({ flight, onClose, price, airline, airlineCode }) => {
   const returnDate = localStorage.getItem("endDate");
   const tripType = localStorage.getItem("tripType");
 
+  // This function will be called when the user types in the input fields
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -21,7 +22,8 @@ const ReservationModal = ({ flight, onClose, price, airline, airlineCode }) => {
       [name]: value,
     }));
   };
-  console.log("flight", flight);
+
+  // This function will be called when the user submits the form and tries to create a reservation
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -72,6 +74,7 @@ const ReservationModal = ({ flight, onClose, price, airline, airlineCode }) => {
       onClose();
     }
   };
+  // This function will format the departure time
   const formatLandingTime = (departureTime) => {
     if (!departureTime) return "N/A";
     const [hours, minutes, seconds] = departureTime.split(":");

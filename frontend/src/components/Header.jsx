@@ -12,6 +12,7 @@ const Header = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Close dropdown when clicked outside
     const handleClickOutside = (event) => {
       if (isDropdownOpen && !event.target.closest("#user-menu")) {
         setIsDropdownOpen(false);
@@ -24,9 +25,9 @@ const Header = () => {
     };
   }, [isDropdownOpen]);
 
+  // Logout function will remove the token from the local storage
   const handleLogout = async () => {
     localStorage.removeItem("token");
-    localStorage.removeItem("userId");
     toast.success("Logout successful 🍀", {
       position: "top-right",
       autoClose: 1000,
