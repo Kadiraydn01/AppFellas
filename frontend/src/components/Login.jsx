@@ -10,7 +10,6 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // Login işlemi
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);

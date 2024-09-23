@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { FaPlaneDeparture, FaPlaneArrival, FaPlane } from "react-icons/fa";
-import foto from "../images/thy1.png";
+import thy from "../images/thy1.png";
+import alitalia from "../images/alitalia.png";
+import lufthansa from "../images/Lufthansa1.png";
+import airFrance from "../images/Air-France.jpg";
+import Brussels from "../images/Brussels.png";
+import AirItaly from "../images/Air-Italy.png";
+import Siberia from "../images/Siberia.png";
+
+import Pegasus from "../images/Pegasus.jpg";
+import British from "../images/British.png";
+import FlyEmirates from "../images/Fly_Emirates.png";
 import FlightDetailsModal from "./FlightDetailsModal";
 import foto2 from "../images/1.jpg";
 import foto3 from "../images/2.jpg";
@@ -9,7 +19,6 @@ import foto4 from "../images/3.jpg";
 import foto5 from "../images/4.jpg";
 import Carousel from "./Carousel";
 import ReservationModal from "./ReservationModal";
-//düzenleme
 
 const Flights = ({ showFlights }) => {
   const [flights, setFlights] = useState([]);
@@ -19,8 +28,8 @@ const Flights = ({ showFlights }) => {
   const [error, setError] = useState(null);
   const [sortOption, setSortOption] = useState("Lowest Price");
   const [arrivalTime, setArrivalTime] = useState("");
-  const [stops] = useState([]);
-  const [airlines] = useState([]);
+  const [stops, setStops] = useState([]);
+  const [airlines, setAirlines] = useState([]);
   const [flightsToShow, setFlightsToShow] = useState(10);
   const [selectedFlight, setSelectedFlight] = useState(null);
   const carouselImages = [foto2, foto3, foto4, foto5];
@@ -32,6 +41,38 @@ const Flights = ({ showFlights }) => {
     244, 250, 251, 258, 260, 265, 267, 268, 245, 220, 230, 204, 216, 231, 241,
   ];
 
+  const airlineLogos = {
+    "Turkish Airlines": thy, //THY
+    Alitalia: alitalia, //AZ
+    Lufthansa: lufthansa, //LH
+    "Air France": airFrance, //AF
+    Brussels: Brussels, //SN
+    "Air Italy": AirItaly, //IG
+    Siberia: Siberia, //S7
+    Pegasus: Pegasus, //PC
+    "British Airways": British, //BA
+    "Fly Emirates": FlyEmirates, //EK
+  };
+  const airlineCodes = {
+    "Turkish Airlines": "THY",
+    Alitalia: "AZ",
+    Lufthansa: "LH",
+    "Air France": "AF",
+    Brussels: "SN",
+    "Air Italy": "IG",
+    Siberia: "S7",
+    Pegasus: "PC",
+    "British Airways": "BA",
+    "Fly Emirates": "EK",
+  };
+  const assignAirlines = (flights) => {
+    const airlines = Object.keys(airlineLogos);
+    return flights.map((flight, index) => ({
+      ...flight,
+      airline: airlines[index % airlines.length],
+    }));
+  };
+
   const openDetailsModal = (flight) => {
     setSelectedFlight(flight);
     setIsDetailsModalOpen(true);
@@ -40,13 +81,17 @@ const Flights = ({ showFlights }) => {
     return flights.map((flight, index) => ({
       ...flight,
       price: priceList[index % priceList.length],
+      logo: airlineLogos[flight.airline] || thy,
     }));
   };
   const openReservationModal = (flight) => {
     setSelectedFlight(flight);
     setIsModalOpen(true);
   };
-
+  const handleStopsChange = (e) => {
+    const stopValue = parseInt(e.target.value);
+    setStops([stopValue]); // Sadece seçilen değeri dizide tutar
+  };
   const handleSortAndFilter = (flightsToFilter) => {
     let filteredFlights = [...flightsToFilter];
 
@@ -65,9 +110,20 @@ const Flights = ({ showFlights }) => {
     }
 
     if (stops.length > 0) {
-      filteredFlights = filteredFlights.filter((flight) =>
-        stops.includes(flight.stops)
-      );
+      filteredFlights = filteredFlights.filter((flight) => {
+        const destinationCount = flight.route.destinations.length;
+        let stopCount = 0;
+
+        if (destinationCount === 1) {
+          stopCount = 0;
+        } else if (destinationCount === 2) {
+          stopCount = 1;
+        } else if (destinationCount > 2) {
+          stopCount = 2;
+        }
+
+        return stops.includes(stopCount);
+      });
     }
 
     if (airlines.length > 0) {
@@ -106,7 +162,9 @@ const Flights = ({ showFlights }) => {
           `http://localhost:5000/api/flights?scheduleDate=${formattedDate}`
         );
 
-        const flightsWithPrices = assignFixedPrices(response.data || []);
+        const fetchedFlights = response.data || [];
+        const flightsWithAirlines = assignAirlines(fetchedFlights);
+        const flightsWithPrices = assignFixedPrices(flightsWithAirlines);
 
         setFlights(flightsWithPrices);
         setFilteredFlights(flightsWithPrices);
@@ -184,7 +242,7 @@ const Flights = ({ showFlights }) => {
     return date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
-      hour12: false,
+      hour12: true,
     });
   };
 
@@ -199,10 +257,10 @@ const Flights = ({ showFlights }) => {
     return date.toLocaleTimeString("en-US", {
       hour: "numeric",
       minute: "2-digit",
-      hour12: false,
+      hour12: true,
     });
   };
-
+  const price = 230;
   return (
     <>
       {!showFlights ? (
@@ -213,9 +271,9 @@ const Flights = ({ showFlights }) => {
             {displayedFlights.length > 0 ? (
               displayedFlights.map((flight, index) => (
                 <div key={index} className="space-y-0">
-                  <div className="bg-white border border-gray-300 rounded-lg h-[300px] shadow-lg justify-between flex items-center space-x-4 hover:shadow-xl hover:bg-slate-100 transition-shadow duration-300">
+                  <div className="bg-white border border-gray-300 rounded-lg h-[270px] shadow-lg justify-between flex items-center space-x-4 hover:shadow-xl hover:bg-slate-100 transition-shadow duration-300">
                     <div className="flex flex-col ml-6 h-full justify-evenly">
-                      <div className="w-full font-bold text-xl text-slate-900">
+                      <div className="w-full font-bold text-lg text-slate-900">
                         Amsterdam - {city}
                       </div>
                       <div>
@@ -255,28 +313,28 @@ const Flights = ({ showFlights }) => {
                       </div>
                     </div>
 
-                    <div className="flex mt-3 justify-between items-center">
+                    <div className="flex mt-3 w-1/3 mx-auto justify-start items-center">
                       <div className="border-t-4 border-gray-300 w-16"></div>
 
-                      <div className="flex flex-col justify-center items-center gap-4">
+                      <div className="flex flex-col justify-center text-center items-center gap-4">
                         <img
-                          className="w-12 h-4"
-                          src={foto}
-                          alt="Airline Logo"
+                          className="w-12 h-10"
+                          src={flight.logo}
+                          alt={`${flight.airline} Logo`}
                         />
-                        <FaPlane className="text-blue-500 w-6 h-6" />
+                        <FaPlane className="text-purple-900 w-6 h-6" />
                         <span className="text-gray-500 w-full">
                           2h 30m (Nonstop)
                         </span>
                       </div>
 
-                      <div className="border-t-4 border-gray-300 w-16"></div>
+                      <div className="border-t-4 border-gray-300 items-start w-16"></div>
                     </div>
 
-                    <div className="flex flex-col w-1/4 items-start h-full justify-between">
-                      <div className="h-8"> </div>
-                      <div className="gap-3 items-start mx-auto flex flex-col">
-                        <div className="flex gap-4 items-center justify-center ">
+                    <div className="flex flex-col w-1/3 items-start h-full justify-between">
+                      <div className="h-20"> </div>
+                      <div className="gap-2 items-start mx-auto flex flex-col">
+                        <div className="flex gap-4 items-center justify-between ">
                           <FaPlaneArrival className="w-4 h-4" />
                           <p className="font-normal text-slate-500">Arrival</p>
                         </div>
@@ -287,12 +345,14 @@ const Flights = ({ showFlights }) => {
                           Airport: {flight.route.destinations.join(", ")}
                         </div>
                       </div>
-                      <button
-                        className="mt-4 bg-purple-800 hover:bg-blue-700 w-full h-20 text-white font-bold py-2 px-4 rounded"
-                        onClick={() => openReservationModal(flight)}
-                      >
-                        Book Flight
-                      </button>
+                      <div className="mt-4 flex items-end justify-end w-full">
+                        <button
+                          className=" bg-purple-900 hover:bg-blue-700 w-[85%]  h-20 text-white font-bold py-2 px-4 rounded"
+                          onClick={() => openReservationModal(flight)}
+                        >
+                          Book Flight
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -334,6 +394,9 @@ const Flights = ({ showFlights }) => {
           {isModalOpen && selectedFlight && (
             <ReservationModal
               flight={selectedFlight}
+              airline={selectedFlight.airline}
+              airlineCode={airlineCodes[selectedFlight.airline]}
+              gate={selectedFlight.gate}
               onClose={() => setIsModalOpen(false)}
               price={
                 tripType === "round-trip"
@@ -349,7 +412,7 @@ const Flights = ({ showFlights }) => {
             />
           )}
 
-          <div className="p-4 w-full max-w-xs max-h-[500px] bg-stone-100 rounded-lg">
+          <div className="p-4 w-full max-w-xs max-h-full space-y-4 overflow-clip bg-stone-100 rounded-lg">
             <div className="mb-4 w-[85%]">
               <label className="block text-gray-700 font-bold mb-2">
                 Sort by:
@@ -366,27 +429,99 @@ const Flights = ({ showFlights }) => {
 
             <div className="mb-4 w-2/3">
               <label className="block text-gray-700 font-bold mb-2">
-                Filter by Departure Time:
+                Departure Time
               </label>
               <div className="space-y-2">
                 <div>
                   <input
                     type="radio"
-                    value="0-12"
-                    checked={arrivalTime === "0-12"}
+                    value="5-11"
+                    checked={arrivalTime === "5-11"}
                     onChange={handleArrivalTimeChange}
                   />
-                  <label className="ml-2">12:00 AM - 11:59 AM</label>
+                  <label className="ml-2">05:00 AM - 11:59 AM</label>
                 </div>
                 <div>
                   <input
                     type="radio"
-                    value="12-24"
-                    checked={arrivalTime === "12-24"}
+                    value="12-18"
+                    checked={arrivalTime === "12-18"}
                     onChange={handleArrivalTimeChange}
                   />
-                  <label className="ml-2">12:00 PM - 11:59 PM</label>
+                  <label className="ml-2">12:00 PM - 05:59 PM</label>
                 </div>
+              </div>
+            </div>
+            <div className="w-[90%]">
+              <label className="block text-gray-700 font-bold mb-2">
+                Stops
+              </label>
+              <div className="space-y-2">
+                <div className="flex justify-between">
+                  <div>
+                    <input
+                      type="radio"
+                      value="0"
+                      checked={stops.includes(0)}
+                      onChange={handleStopsChange}
+                    />
+                    <label className="ml-2">Nonstop</label>
+                  </div>
+                  <span className="text-gray-500">${price}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <div>
+                    <input
+                      type="radio"
+                      value="1"
+                      checked={stops.includes(1)}
+                      onChange={handleStopsChange}
+                    />
+                    <label className="ml-2">1 Stop</label>
+                  </div>
+                  <span className="text-gray-500">${price}</span>
+                </div>
+
+                <div className="flex justify-between">
+                  <div>
+                    <input
+                      type="radio"
+                      value="2"
+                      checked={stops.includes(2)}
+                      onChange={handleStopsChange}
+                    />
+                    <label className="ml-2">2+ Stops</label>
+                  </div>
+                  <span className="text-gray-500">${price}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-2 w-[90%]">
+              <label className="block text-gray-700 font-bold mb-2">
+                Airlines Included
+              </label>
+              <div className="space-y-2">
+                {Object.keys(airlineLogos).map((airline) => (
+                  <div key={airline} className="flex justify-between">
+                    <div>
+                      <input
+                        type="radio"
+                        name="airline"
+                        className="form-radio fill-blue-500 text-blue-600 h-4 w-4"
+                        value={airline}
+                        checked={airlines.includes(airline)}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          setAirlines([value]);
+                        }}
+                      />
+                      <label className="ml-2">{airline}</label>
+                    </div>
+                    <span className="text-gray-500">${price}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

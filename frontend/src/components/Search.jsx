@@ -100,7 +100,7 @@ const Search = ({ onSearch }) => {
     <div className="bg-white flex flex-col mx-8 rounded-3xl justify-between px-6 ">
       <div className="flex justify-between  my-8 items-center">
         <div className="flex gap-4 items-center">
-          <IoAirplaneSharp className="text-4xl text-purple-600" />
+          <IoAirplaneSharp className="text-4xl text-purple-900" />
           <h1 className="font-semibold text-xl">BOOK YOUR FLIGHT</h1>
         </div>
         <div className="flex">
@@ -134,10 +134,10 @@ const Search = ({ onSearch }) => {
           </div>
         </div>
       </div>
-      <div className="flex flex-row justify-center items-center text-center space-x-6">
-        <div className="flex justify-center items-center space-x-4">
+      <div className="flex flex-row justify-between items-center text-center space-x-6">
+        <div className="flex justify-center items-center space-x-2">
           <div className="relative">
-            <FaPlaneDeparture className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-600 w-4" />
+            <FaPlaneDeparture className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-900 w-4" />
             <input
               type="text"
               id="fromCity"
@@ -145,19 +145,19 @@ const Search = ({ onSearch }) => {
               onChange={(e) => setFromCity(e.target.value)}
               placeholder="Amsterdam-AMS"
               disabled={true}
-              className="bg-white border px-4 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2.5 w-48 pl-10"
+              className="bg-white border px-4 border-gray-300 text-gray-900 text-sm rounded-s-2xl focus:ring-blue-500 focus:border-blue-500 p-2.5 w-64 pl-10"
             />
           </div>
 
           <div className="relative">
-            <FaPlaneArrival className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-600 w-4" />
+            <FaPlaneArrival className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-900 w-4" />
             <input
               type="text"
               id="toCity"
               value={toCity}
               onChange={(e) => setToCity(e.target.value)}
               placeholder="To City"
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg w-48 focus:ring-blue-500 focus:border-blue-500 p-2.5 pl-8"
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-e-2xl w-64 focus:ring-blue-500 focus:border-blue-500 p-2.5 pl-8"
               onFocus={() => {
                 if (toCity) {
                   setFilteredAirports(
@@ -188,7 +188,7 @@ const Search = ({ onSearch }) => {
             )}
           </div>
         </div>
-        <div className="flex justify-center space-x-5 items-center">
+        <div className="flex justify-center space-x-2 items-center">
           <div className="flex relative">
             <DatePicker
               selected={startDate}
@@ -196,11 +196,11 @@ const Search = ({ onSearch }) => {
               selectsStart
               startDate={startDate}
               endDate={endDate}
-              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-8 focus:ring-blue-500 focus:border-blue-500 w-40 p-2.5"
+              className="bg-white border border-gray-300 text-gray-900 text-sm rounded-s-2xl px-8 focus:ring-blue-500 focus:border-blue-500 w-56 p-2.5"
               minDate={new Date()}
               dateFormat={"dd/MM/yyyy"}
             />
-            <MdDateRange className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-600 w-5 h-5" />
+            <MdDateRange className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-900 w-5 h-5" />
           </div>
           <div className="flex relative">
             <DatePicker
@@ -209,20 +209,20 @@ const Search = ({ onSearch }) => {
               selectsEnd
               startDate={startDate}
               endDate={endDate}
-              className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-lg px-8 focus:ring-blue-500 focus:border-blue-500 w-40 p-2.5 ${
+              className={`bg-white border border-gray-300 text-gray-900 text-sm rounded-e-2xl px-8 focus:ring-blue-500 focus:border-blue-500 w-56 p-2.5 ${
                 tripType === "one-way" ? "bg-slate-300" : ""
               }`}
               minDate={startDate}
               dateFormat={"dd/MM/yyyy"}
               disabled={tripType === "one-way"}
             />
-            <MdDateRange className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-600 w-5 h-5" />
+            <MdDateRange className="absolute left-2 top-1/2 transform -translate-y-1/2 text-purple-900 w-5 h-5" />
           </div>
         </div>
       </div>
       <div className="flex justify-start py-6 w-40">
         <button
-          className="bg-purple-800  text-white font-semibold  py-3 px-4 rounded-xl"
+          className="bg-purple-900  text-white font-semibold  py-3 px-4 rounded-xl"
           onClick={searchFlights}
         >
           Show Flights

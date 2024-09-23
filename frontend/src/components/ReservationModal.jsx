@@ -3,7 +3,7 @@ import api from "./api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const ReservationModal = ({ flight, onClose, price }) => {
+const ReservationModal = ({ flight, onClose, price, airline, airlineCode }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -21,7 +21,7 @@ const ReservationModal = ({ flight, onClose, price }) => {
       [name]: value,
     }));
   };
-
+  console.log("flight", flight);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -30,12 +30,18 @@ const ReservationModal = ({ flight, onClose, price }) => {
         flightNumber: flight.flightNumber,
         departureDate: flightDate,
         returnDate: returnDate ? returnDate : null,
-        fromCity: tripType === "round-trip" ? "Amsterdam" : city,
-        toCity: tripType === "round-trip" ? city : "Amsterdam",
+        fromCity: "Amsterdam",
+        toCity: city,
         price: price,
+        airline: airline,
+        airlineCode: airlineCode,
+        toCityCode: flight.route.destinations[0],
+        fromCityCode: "AMS",
+        scheduleTime: flight.scheduleTime,
+        departureTime: departureTime,
       });
       console.log("Reservation created successfully", response.data);
-      toast.success("Reservation Created successfully 🍀", {
+      toast.success("Created successfully 🍀", {
         position: "top-right",
         autoClose: 1000,
         hideProgressBar: false,
@@ -49,7 +55,7 @@ const ReservationModal = ({ flight, onClose, price }) => {
       }, 1500);
     } catch (error) {
       console.error("Error creating reservation", error);
-      toast.error("Login failed", {
+      toast.error("Creating reservation failed", {
         position: "top-right",
         autoClose: 5000,
         hideProgressBar: false,
@@ -66,7 +72,25 @@ const ReservationModal = ({ flight, onClose, price }) => {
       onClose();
     }
   };
-
+  const formatLandingTime = (departureTime) => {
+    if (!departureTime) return "N/A";
+    const [hours, minutes, seconds] = departureTime.split(":");
+    const date = new Date();
+    date.setHours(parseInt(hours));
+    date.setMinutes(parseInt(minutes));
+    date.setSeconds(parseInt(seconds));
+    date.setHours(date.getHours() - 2);
+    date.setMinutes(date.getMinutes() + 15);
+    date.setSeconds(date.getSeconds());
+    return date.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: false,
+    });
+  };
+  const departureTime = formatLandingTime(flight.scheduleTime);
+  console.log("departureTime", departureTime);
   return (
     <div
       className="fixed w-full inset-0 flex items-center justify-center z-50 bg-black bg-opacity-70"
@@ -141,6 +165,18 @@ const ReservationModal = ({ flight, onClose, price }) => {
                   <td className="border px-2 py-1 font-medium">Date:</td>
                   <td className="border px-2 py-1">{flightDate}</td>
                 </tr>
+                <tr className="bg-gray-100">
+                  <td className="border px-2 py-1 font-medium">Time:</td>
+                  <td className="border px-2 py-1">{flight.scheduleTime}</td>
+                </tr>
+                <tr className="bg-gray-100">
+                  <td className="border px-2 py-1 font-medium">Airline:</td>
+                  <td className="border px-2 py-1">{airline}</td>
+                </tr>
+                <tr className="bg-gray-100">
+                  <td className="border px-2 py-1 font-medium">Code:</td>
+                  <td className="border px-2 py-1">{airlineCode}</td>
+                </tr>
                 <tr>
                   <td className="border px-2 py-1 font-medium">
                     Flight Number:
@@ -172,6 +208,18 @@ const ReservationModal = ({ flight, onClose, price }) => {
                   <tr className="bg-gray-100">
                     <td className="border px-2 py-1 font-medium">Date:</td>
                     <td className="border px-2 py-1">{returnDate}</td>
+                  </tr>
+                  <tr className="bg-gray-100">
+                    <td className="border px-2 py-1 font-medium">Time:</td>
+                    <td className="border px-2 py-1">{departureTime}</td>
+                  </tr>
+                  <tr className="bg-gray-100">
+                    <td className="border px-2 py-1 font-medium">Airline:</td>
+                    <td className="border px-2 py-1">{airline}</td>
+                  </tr>
+                  <tr className="bg-gray-100">
+                    <td className="border px-2 py-1 font-medium">Code:</td>
+                    <td className="border px-2 py-1">{airlineCode}</td>
                   </tr>
                   <tr>
                     <td className="border px-2 py-1 font-medium">

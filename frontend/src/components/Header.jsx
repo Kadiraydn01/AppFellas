@@ -48,17 +48,18 @@ const Header = () => {
           <MdAirplaneTicket className="text-4xl text-purple-900" />
           <div className="text-xl font-semibold">PLANE SCAPE</div>
         </div>
-        <div className="flex items-center text-center gap-4">
-          <div className="flex items-center font-bold gap-2">
-            <FaTags className="text-xl text-purple-950" />
-            Deals
+        <div className="flex items-center text-center space-x-10">
+          <div className="flex">
+            <div className="flex items-center font-bold gap-2">
+              <FaTags className="text-xl text-purple-950" />
+              Deals
+            </div>
+            <div className="flex items-center font-bold gap-2 ml-4">
+              <TbWorld className="text-xl text-purple-950" />
+              Discover
+            </div>
           </div>
-          <div className="flex items-center font-bold gap-2 ml-4">
-            <TbWorld className="text-xl text-purple-950" />
-            Discover
-          </div>
-
-          <div className="relative" id="user-menu">
+          <div className="relative z-50" id="user-menu">
             <div
               className="flex items-center cursor-pointer"
               onClick={() => setIsDropdownOpen((prev) => !prev)}
@@ -72,6 +73,12 @@ const Header = () => {
 
             {isDropdownOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
+                <button
+                  className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  onClick={() => (window.location.href = "/reservation")}
+                >
+                  My Reservation
+                </button>
                 <button
                   className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
                   onClick={handleLogout}

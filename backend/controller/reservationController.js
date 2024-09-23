@@ -12,8 +12,17 @@ export const createReservation = async (req, res) => {
     fromCity,
     toCity,
     price,
+    airline,
+    airlineCode,
+    toCityCode,
+    fromCityCode,
+    scheduleTime,
+    departureTime,
+    tripType,
   } = req.body;
   const userId = req.user.userId;
+
+  const reservationDate = moment().tz("Europe/Istanbul").toDate();
 
   if (
     !fullName ||
@@ -23,32 +32,33 @@ export const createReservation = async (req, res) => {
     !departureDate ||
     !fromCity ||
     !toCity ||
+    !airline ||
     price === undefined
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }
 
   try {
-    const convertedDepartureDate = moment
-      .tz(departureDate, "Europe/Istanbul")
-      .toDate();
-    const convertedReturnDate = returnDate
-      ? moment.tz(returnDate, "Europe/Istanbul").toDate()
-      : null;
-
     const reservation = new Reservation({
       user: userId,
       fullName,
       email,
       phone,
-      reservationDate: Date.now(),
+      reservationDate: reservationDate,
       flightNumber,
-      departureDate: convertedDepartureDate,
-      returnDate: convertedReturnDate,
+      departureDate,
+      returnDate,
       flightDirection: "D",
       fromCity,
       toCity,
       price,
+      airline,
+      airlineCode,
+      toCityCode,
+      fromCityCode,
+      scheduleTime,
+      departureTime,
+      tripType,
     });
 
     await reservation.save();
@@ -64,7 +74,15 @@ export const createReservation = async (req, res) => {
 export const getReservations = async (req, res) => {
   try {
     const reservations = await Reservation.find({ user: req.user.userId });
-    res.json(reservations);
+
+    const reservationsWithLocalTime = reservations.map((reservation) => ({
+      ...reservation._doc,
+      reservationDate: moment(reservation.reservationDate)
+        .tz("Europe/Istanbul")
+        .format("YYYY-MM-DD HH:mm:ss"),
+    }));
+
+    res.json(reservationsWithLocalTime);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
