@@ -79,28 +79,25 @@ To run this project you will need to add the following environment variables to 
 
 ### Homepage Before Search Flights
 
-[![image](https://r.resimlink.com/nqP35lSJ0b.png)](https://resimlink.com/nqP35lSJ0b)
+![image](https://github.com/Kadiraydn01/AppFellas/blob/main/HomePage.png?raw=true)
 
 ### Homepage After Search Flights
 
-[![image](https://r.resimlink.com/sM9LOPj0-V6.png)](https://resimlink.com/sM9LOPj0-V6)
+![image](https://r.resimlink.com/sM9LOPj0-V6.png)
 
 ### Flight Detail Part
 
-[![image](https://r.resimlink.com/FU2wbsj7kY.png)](https://resimlink.com/FU2wbsj7kY)
-
+![image](https://r.resimlink.com/FU2wbsj7kY.png)
 ### Reservation Page
 
-[![image](https://r.resimlink.com/2eEJd_Yb7Uig.png)](https://resimlink.com/2eEJd_Yb7Uig)
+![image](https://r.resimlink.com/2eEJd_Yb7Uig.png)
 
 ### Reservation Detail Part
 
-[![image](https://r.resimlink.com/3nSXjA1xs.png)](https://resimlink.com/3nSXjA1xs)
-
+![image](https://r.resimlink.com/3nSXjA1xs.png)
 ##### Logout And Access for Reservation Page
 
-[![image](https://r.resimlink.com/Lc7AdfvDwjS.png)](https://resimlink.com/Lc7AdfvDwjS)
-
+![image](https://r.resimlink.com/Lc7AdfvDwjS.png)
 #### Login Page
 
-[![image](https://r.resimlink.com/txXz82wyH.png)](https://resimlink.com/txXz82wyH)
+![image](https://r.resimlink.com/txXz82wyH.png)
