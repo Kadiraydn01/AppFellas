@@ -79,7 +79,7 @@ To run this project you will need to add the following environment variables to 
 
 ### Homepage Before Search Flights
 
-![image](https://github.com/Kadiraydn01/AppFellas/blob/main/HomePage.png?raw=true)
+![image](https://resimlink.com/nqP35lSJ0b)
 
 ### Homepage After Search Flights
 
