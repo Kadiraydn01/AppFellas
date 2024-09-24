@@ -89,6 +89,15 @@ To run this project you will need to add the following environment variables to 
 ### Flight Detail Part
 
 ![image](https://r.resimlink.com/FU2wbsj7kY.png)
+
+### Booking Page
+![image](https://github.com/Kadiraydn01/AppFellas/blob/main/Book%20flight.png?raw=true)
+
+
+### Toastify
+
+![image](https://github.com/Kadiraydn01/AppFellas/blob/main/toastify.png?raw=true)
+
 ### Reservation Page
 
 ![image](https://r.resimlink.com/2eEJd_Yb7Uig.png)
