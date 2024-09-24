@@ -80,7 +80,7 @@ To run this project you will need to add the following environment variables to 
 ### Homepage Before Search Flights
 
 
-![image](https://r.resimlink.com/nqP35lSJ0b.png)
+![image](https://github.com/Kadiraydn01/AppFellas/blob/main/HomeSlider.png?raw=true)
 
 ### Homepage After Search Flights
 
